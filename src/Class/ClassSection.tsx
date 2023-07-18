@@ -1,6 +1,5 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
-import { reseed } from "../fetch-calls";
 
 type Props = {
   label: string;

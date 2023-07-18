@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { ReactNode, createContext, useState } from "react";
 
 export type User = {
   ip: string;
@@ -13,8 +13,10 @@ const AuthContext = createContext({
   authState: "loading",
 } as AuthState);
 
-export const AuthProvider: React.FC<Element | Element[]> = ({ children }) => {
-  const [authState, setAuthState] = useState<AuthState>({
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const [authState] = useState<AuthState>({
     authState: "loading",
     user: null,
   });
