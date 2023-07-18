@@ -5,12 +5,6 @@ export const baseUrl =
     ? "https://pup-e-picker-live-be.vercel.app"
     : "http://localhost:4000";
 
-console.log({
-  baseUrl,
-  meta: import.meta,
-  env: import.meta?.env,
-});
-
 export const getAllDogs = () =>
   fetch(`${baseUrl}/dogs`)
     .then((response) => response.json())
