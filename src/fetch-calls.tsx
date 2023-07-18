@@ -1,15 +1,8 @@
 import { z } from "zod";
 import { Dog, dogSchema } from "./types";
-export const baseUrl =
-  import.meta?.env?.VITE_NODE_ENV === "production"
-    ? "https://pup-e-picker-live-be.vercel.app"
-    : "http://localhost:4000";
-
-console.log({
-  baseUrl,
-  meta: import.meta,
-  env: import.meta?.env,
-});
+export const baseUrl = (import.meta?.url || "").includes("localhost:517")
+  ? "https://pup-e-picker-live-be.vercel.app"
+  : "http://localhost:4000";
 
 export const getAllDogs = () =>
   fetch(`${baseUrl}/dogs`)
