@@ -1,4 +1,4 @@
-import { Icons } from "../assets/icons";
+import { Icons } from "../icons";
 
 // ! Do Not Change This Component
 export const FavoriteButton = ({ onClick }: { onClick: () => void }) => (

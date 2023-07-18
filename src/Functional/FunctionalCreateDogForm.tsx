@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { dogPictures } from "../assets/dog-pictures";
 import { Dog } from "../types";
+import { dogPictures } from "../dog-pictures";
 
 export const FunctionalCreateDogForm = ({
   addDog,

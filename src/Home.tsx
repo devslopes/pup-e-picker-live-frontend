@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { dogPictures } from "./dog-pictures";
 
 export const Home = () => {
   return (
@@ -37,7 +38,7 @@ export const Home = () => {
           as separate apps
         </p>
       </div>
-      <img src="/src/assets/blue-heeler.png" width={200} alt="" />
+      <img src={dogPictures.BlueHeeler} width={200} alt="" />
       <div className="links-container">
         <Link to="/functional">
           <button className="btn">Functional App</button>

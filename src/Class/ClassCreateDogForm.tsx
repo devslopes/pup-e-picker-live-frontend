@@ -1,6 +1,6 @@
 import { Component } from "react";
-import { dogPictures } from "../assets/dog-pictures";
 import { Dog } from "../types";
+import { dogPictures } from "../dog-pictures";
 
 type Props = {
   addDog: (dog: Omit<Dog, "id" | "isFavorite">) => void;
