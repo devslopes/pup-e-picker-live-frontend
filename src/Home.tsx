@@ -37,7 +37,7 @@ export const Home = () => {
           as separate apps
         </p>
       </div>
-      <img src="/src/assets/blue-heeler.png" width={200} alt="" />
+      <img src="/public/assets/blue-heeler.png" width={200} alt="" />
       <div className="links-container">
         <Link to="/functional">
           <button className="btn">Functional App</button>
