@@ -1,8 +1,7 @@
 import { z } from "zod";
 import { Dog, dogSchema } from "./types";
-
 export const baseUrl =
-  import.meta?.env?.NODE_ENV === "production"
+  import.meta?.env?.VITE_NODE_ENV === "production"
     ? "https://pup-e-picker-live-be.vercel.app"
     : "http://localhost:4000";
 
