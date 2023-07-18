@@ -1,7 +1,10 @@
 import { z } from "zod";
 import { Dog, dogSchema } from "./types";
 
-export const baseUrl = "http://localhost:4000";
+export const baseUrl =
+  import.meta?.env.NODE_ENV === "production"
+    ? "https://pup-e-picker-live-be.vercel.app"
+    : "http://localhost:4000";
 
 export const getAllDogs = () =>
   fetch(`${baseUrl}/dogs`)
