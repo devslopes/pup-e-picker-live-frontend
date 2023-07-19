@@ -1,11 +1,31 @@
 import { z } from "zod";
 import { Dog, dogSchema } from "./types";
+import { v4 as uuidV4 } from "uuid";
+
+const getUniqueId = () => {
+  const userIdFromLocalStorage = localStorage.getItem("pup-e-picker-user-id");
+  if (!userIdFromLocalStorage) {
+    const newId = (uuidV4 as () => string)();
+    localStorage.setItem("pup-e-picker-user-id", newId);
+    return newId;
+  }
+  return userIdFromLocalStorage;
+};
+
+const getAuthHeader = () => ({
+  "pup-e-picker-user-id": getUniqueId(),
+});
+
 export const baseUrl = (import.meta?.url || "").includes("localhost:517")
   ? "http://localhost:4000"
   : "https://pup-e-picker-live-be.vercel.app";
 
 export const getAllDogs = () =>
-  fetch(`${baseUrl}/dogs`)
+  fetch(`${baseUrl}/dogs`, {
+    headers: {
+      ...getAuthHeader(),
+    },
+  })
     .then((response) => response.json())
     .then((data) => z.array(dogSchema).parse(data));
 
@@ -14,6 +34,7 @@ export const postDog = (dog: Omit<Dog, "id" | "isFavorite">) =>
     method: "post",
     headers: {
       "Content-Type": "application/json",
+      ...getAuthHeader(),
     },
     body: JSON.stringify({ ...dog, isFavorite: false }),
   }).then((response) => {
@@ -26,6 +47,9 @@ export const postDog = (dog: Omit<Dog, "id" | "isFavorite">) =>
 export const deleteDogRequest = (dogId: number) =>
   fetch(`${baseUrl}/dogs/${dogId}`, {
     method: "delete",
+    headers: {
+      ...getAuthHeader(),
+    },
   }).then((response) => {
     if (!response.ok) {
       throw new Error("Failed to create dog");
@@ -43,6 +67,7 @@ export const patchFavoriteForDog = ({
   fetch(`${baseUrl}/dogs/${dogId}`, {
     headers: {
       "Content-Type": "application/json",
+      ...getAuthHeader(),
     },
     method: "PATCH",
     body: JSON.stringify({
@@ -58,4 +83,7 @@ export const patchFavoriteForDog = ({
 export const reseed = () =>
   fetch(`${baseUrl}/reseed`, {
     method: "post",
+    headers: {
+      ...getAuthHeader(),
+    },
   });
