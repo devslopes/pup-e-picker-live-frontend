@@ -14,12 +14,14 @@ import { toast } from "react-hot-toast";
 type State = {
   showComponent: string;
   dogs: Dog[];
+  isLoading: boolean;
 };
 
-export class ClassApp extends Component {
+export class ClassApp extends Component<Record<string, never>, State> {
   state: State = {
     dogs: [],
     showComponent: "all-dogs",
+    isLoading: false,
   };
 
   componentDidMount(): void {
@@ -27,17 +29,22 @@ export class ClassApp extends Component {
   }
 
   refetchDogs = () => {
+    this.setState({ isLoading: true });
     getAllDogs()
       .then((dogs) => {
         this.setState({ dogs });
       })
       .catch((e) => {
         console.error(e);
+      })
+      .finally(() => {
+        this.setState({ isLoading: false });
       });
   };
 
   addDog = (dog: Omit<Dog, "id" | "isFavorite">) => {
-    postDog(dog)
+    this.setState({ isLoading: true });
+    return postDog(dog)
       .then(() => this.refetchDogs())
       .then(() => {
         toast.success(`created ${dog.name}`);
@@ -45,34 +52,56 @@ export class ClassApp extends Component {
       .catch((e) => {
         toast.error(`could not create ${dog.name}`);
         console.error(e);
+      })
+      .finally(() => {
+        this.setState({ isLoading: false });
       });
   };
 
   deleteDog = (dogId: number) => {
+    this.setState({ isLoading: true });
     deleteDogRequest(dogId)
       .then(() => this.refetchDogs())
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => {
+        this.setState({ isLoading: false });
+      });
   };
 
   unfavoriteDog = (dogId: number) => {
+    this.setState({ isLoading: true });
     patchFavoriteForDog({ dogId, isFavorite: false })
       .then(() => this.refetchDogs())
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => {
+        this.setState({ isLoading: false });
+      });
   };
 
   favoriteDog = (dogId: number) => {
+    this.setState({ isLoading: true });
+
     patchFavoriteForDog({ dogId, isFavorite: true })
       .then(() => this.refetchDogs())
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => {
+        this.setState({ isLoading: false });
+      });
   };
 
   reseedDogs = () => {
+    this.setState({ isLoading: true });
     reseed()
       .then(() => this.refetchDogs())
       .then(() => toast.success("reseeded"))
       .catch((e) => {
         toast.error("something went wrong");
         console.error(e);
+      })
+      .finally(() => {
+        this.setState({
+          isLoading: false,
+        });
       });
   };
 
@@ -140,10 +169,14 @@ export class ClassApp extends Component {
                 unfavoriteDog={this.unfavoriteDog}
                 deleteDog={this.deleteDog}
                 favoriteDog={this.favoriteDog}
+                isLoading={this.state.isLoading}
               />
             )}
             {showComponent === "create-dog-form" && (
-              <ClassCreateDogForm addDog={this.addDog} />
+              <ClassCreateDogForm
+                addDog={this.addDog}
+                isLoading={this.state.isLoading}
+              />
             )}
           </>
         </ClassSection>

@@ -1,5 +1,5 @@
 import { Dog } from "../types";
-import { FunctionalDogCard } from "../Shared/DogCard";
+import { DogCard } from "../Shared/DogCard";
 
 type Handler = (dogId: number) => void;
 
@@ -10,23 +10,26 @@ export const FunctionalDogs = ({
   deleteDog,
   unfavoriteDog,
   favoriteDog,
+  isLoading,
 }: {
   dogs: Dog[];
   deleteDog: Handler;
   unfavoriteDog: Handler;
   favoriteDog: Handler;
+  isLoading: boolean;
 }) => {
   return (
     //  the "<> </>"" are called react fragments, it's like adding all the html inside
     // without adding an actual html element
     <>
       {dogs.map((dog) => (
-        <FunctionalDogCard
+        <DogCard
           dog={dog}
           key={dog.id}
           onTrashIconClick={() => deleteDog(dog.id)}
           onHeartClick={() => unfavoriteDog(dog.id)}
           onEmptyHeartClick={() => favoriteDog(dog.id)}
+          isLoading={isLoading}
         />
       ))}
     </>

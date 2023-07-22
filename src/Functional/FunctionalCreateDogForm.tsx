@@ -4,8 +4,10 @@ import { dogPictures } from "../dog-pictures";
 
 export const FunctionalCreateDogForm = ({
   addDog,
+  isLoading,
 }: {
   addDog: (dog: Omit<Dog, "id" | "isFavorite">) => void;
+  isLoading: boolean;
 }) => {
   const [nameInput, setNameInput] = useState("");
   const [descriptionInput, setDescriptionInput] = useState("");
@@ -35,6 +37,7 @@ export const FunctionalCreateDogForm = ({
         onChange={(e) => {
           setNameInput(e.target.value);
         }}
+        disabled={isLoading}
       />
       <label htmlFor="description">Dog Description</label>
       <textarea
@@ -46,6 +49,7 @@ export const FunctionalCreateDogForm = ({
         onChange={(e) => {
           setDescriptionInput(e.target.value);
         }}
+        disabled={isLoading}
       ></textarea>
       <label htmlFor="picture">Select an Image</label>
       <select
@@ -62,7 +66,7 @@ export const FunctionalCreateDogForm = ({
           );
         })}
       </select>
-      <input type="submit" value="submit" />
+      <input type="submit" value="submit" disabled={isLoading} />
     </form>
   );
 };

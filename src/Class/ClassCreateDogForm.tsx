@@ -3,7 +3,8 @@ import { Dog } from "../types";
 import { dogPictures } from "../dog-pictures";
 
 type Props = {
-  addDog: (dog: Omit<Dog, "id" | "isFavorite">) => void;
+  isLoading: boolean;
+  addDog: (dog: Omit<Dog, "id" | "isFavorite">) => Promise<unknown>;
 };
 
 type State = {
@@ -28,18 +29,22 @@ export class ClassCreateDogForm extends Component<Props, State> {
   };
   render() {
     const { nameInput, descriptionInput, selectedImage } = this.state;
+    const { isLoading } = this.props;
     return (
       <form
         action=""
         id="create-dog-form"
         onSubmit={(e) => {
           e.preventDefault();
-          this.props.addDog({
-            name: nameInput,
-            description: descriptionInput,
-            image: selectedImage,
-          });
-          this.reset();
+          this.props
+            .addDog({
+              name: nameInput,
+              description: descriptionInput,
+              image: selectedImage,
+            })
+            .finally(() => {
+              this.reset();
+            });
         }}
       >
         <h4>Create a New Dog</h4>
@@ -50,6 +55,7 @@ export class ClassCreateDogForm extends Component<Props, State> {
           onChange={(e) => {
             this.setState({ nameInput: e.target.value });
           }}
+          disabled={isLoading}
         />
         <label htmlFor="description">Dog Description</label>
         <textarea
@@ -61,6 +67,7 @@ export class ClassCreateDogForm extends Component<Props, State> {
           onChange={(e) => {
             this.setState({ descriptionInput: e.target.value });
           }}
+          disabled={isLoading}
         ></textarea>
         <label htmlFor="picture">Select an Image</label>
         <select
@@ -68,6 +75,7 @@ export class ClassCreateDogForm extends Component<Props, State> {
           onChange={(e) => {
             this.setState({ selectedImage: e.target.value });
           }}
+          disabled={isLoading}
         >
           {Object.entries(dogPictures).map(([label, pictureValue]) => {
             return (
@@ -77,7 +85,7 @@ export class ClassCreateDogForm extends Component<Props, State> {
             );
           })}
         </select>
-        <input type="submit" value="submit" />
+        <input type="submit" value="submit" disabled={isLoading} />
       </form>
     );
   }

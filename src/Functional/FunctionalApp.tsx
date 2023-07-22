@@ -15,16 +15,22 @@ import toast from "react-hot-toast";
 export function FunctionalApp() {
   const [showComponent, setShowComponent] = useState("all-dogs");
   const [dogs, setDogs] = useState<Dog[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const refetchDogs = () => {
+    setIsLoading(true);
     getAllDogs()
       .then(setDogs)
       .catch((e) => {
         console.error(e);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
   const addDog = (dog: Omit<Dog, "id" | "isFavorite">) => {
+    setIsLoading(true);
     postDog(dog)
       .then(() => refetchDogs())
 
@@ -34,25 +40,36 @@ export function FunctionalApp() {
       .catch((e) => {
         toast.error(`could not create ${dog.name}`);
         console.error(e);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
   const deleteDog = (dogId: number) => {
+    setIsLoading(true);
     deleteDogRequest(dogId)
       .then(() => refetchDogs())
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const unfavoriteDog = (dogId: number) => {
+    setIsLoading(true);
     patchFavoriteForDog({ dogId, isFavorite: false })
       .then(() => refetchDogs())
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
   };
 
   const favoriteDog = (dogId: number) => {
+    setIsLoading(true);
     patchFavoriteForDog({ dogId, isFavorite: true })
       .then(() => refetchDogs())
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
   };
 
   const unfavorited = dogs.filter((dog) => dog.isFavorite === false);
@@ -131,10 +148,11 @@ export function FunctionalApp() {
               unfavoriteDog={unfavoriteDog}
               deleteDog={deleteDog}
               favoriteDog={favoriteDog}
+              isLoading={isLoading}
             />
           )}
           {showComponent === "create-dog-form" && (
-            <FunctionalCreateDogForm addDog={addDog} />
+            <FunctionalCreateDogForm addDog={addDog} isLoading={isLoading} />
           )}
         </>
       </FunctionalSection>

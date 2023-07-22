@@ -16,7 +16,7 @@ const getAuthHeader = () => ({
   "pup-e-picker-user-id": getUniqueId(),
 });
 
-export const baseUrl = (import.meta?.url || "").includes("localhost:517")
+export const baseUrl = (import.meta.url || "").includes("http:/")
   ? "http://localhost:4000"
   : "https://pup-e-picker-live-be.vercel.app";
 
